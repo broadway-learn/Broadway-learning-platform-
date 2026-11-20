@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin - Broadway Learn</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    main { max-width: 900px; }
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { text-align: left; padding: 10px; border-bottom: 1px solid #e2e8f0; }
+    .badge { padding: 3px 10px; border-radius: 999px; font-size: 0.8rem; font-weight: 600; }
+    .pending { background: #fef3c7; color: #92400e; }
+    .verified { background: #dcfce7; color: #166534; }
+    .rejected { background: #fee2e2; color: #991b1b; }
+    .small { padding: 6px 12px; margin: 0 4px 0 0; font-size: 0.85rem; }
+    .btn-red { background: #b91c1c; }
+    form.inline { display: inline; }
+  </style>
+</head>
+<body>
+  <header><div class="brand">Broadway <span>Learn</span> · Admin</div></header>
+  <main>
+    <div class="card">
+      <h1>Student verification</h1>
+      <p class="muted">Review each student, then approve or reject.</p>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Name</th><th>School</th><th>Status</th><th>Action</th></tr>
+          {% for s in students %}
+          <tr>
+            <td>{{ s.full_name }}<br><span class="muted">{{ s.email }}</span></td>
+            <td>{{ s.school }}</td>
+            <td><span class="badge {{ s.status }}">{{ s.status }}</span></td>
+            <td>
+              <form class="inline" method="POST" action="/admin/update/{{ s.id }}/verified"><button class="btn small" type="submit">Approve</button></form>
+              <form class="inline" method="POST" action="/admin/update/{{ s.id }}/rejected"><button class="btn small btn-red" type="submit">Reject</button></form>
+            </td>
+          </tr>
+          {% else %}
+          <tr><td colspan="4" class="muted">No students yet.</td></tr>
+          {% endfor %}
+        </table>
+      </div>
+    </div>
+  </main>
+  <footer>Open source · Built for the Broadway community</footer>
+</body>
+</html>
