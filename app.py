@@ -80,6 +80,42 @@ def admin_update(student_id, action):
     conn.close()
     return redirect(url_for("admin"))
 init_db()
+from flask import session
+
+app.secret_key = os.environ.get("SECRET_KEY", "dev-only-change-me")
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    message = None
+    if request.method == "POST":
+        email = request.form["email"].strip().lower()
+        conn = get_db()
+        student = conn.execute(
+            "SELECT * FROM students WHERE lower(email) = ? AND status = 'verified' "
+            "ORDER BY id DESC LIMIT 1", (email,)
+        ).fetchone()
+        conn.close()
+        if student:
+            session["student_id"] = student["id"]
+            return redirect(url_for("courses"))
+        message = "We could not find a verified student with that email yet."
+    return render_template("login.html", message=message)
+
+@app.route("/courses")
+def courses():
+    if "student_id" not in session:
+        return redirect(url_for("login"))
+    conn = get_db()
+    student = conn.execute(
+        "SELECT * FROM students WHERE id = ?", (session["student_id"],)
+    ).fetchone()
+    conn.close()
+    return render_template("courses.html", student=student)
+
+@app.route("/logout")
+def logout():
+    session.clear()
+    return redirect(url_for("home"))
 
 if __name__ == "__main__":
     app.run(debug=True)

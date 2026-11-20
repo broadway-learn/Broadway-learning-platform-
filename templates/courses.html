@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Courses - Broadway Learn</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header><div class="brand">Broadway <span>Learn</span></div></header>
+  <main>
+    <div class="card">
+      <h1>Welcome, {{ student.full_name }}</h1>
+      <p class="muted">You are a verified student at {{ student.school }}.</p>
+      <h2>Your courses</h2>
+      <p><strong>Intro to Digital Skills</strong><br>
+         <span class="muted">A short starter course. Coming next: lessons and a quiz.</span></p>
+      <a class="btn" href="/logout">Log out</a>
+    </div>
+  </main>
+  <footer>Open source · Built for the Broadway community</footer>
+</body>
+</html>
